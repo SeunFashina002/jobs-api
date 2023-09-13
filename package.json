@@ -19,6 +19,7 @@
     "express-async-errors": "^3.1.1",
     "express-rate-limit": "^6.11.2",
     "helmet": "^7.0.0",
+    "http-status-codes": "^2.2.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^7.5.0",
     "validator": "^13.11.0"
