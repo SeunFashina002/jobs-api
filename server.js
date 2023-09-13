@@ -3,6 +3,8 @@ require("express-async-errors");
 
 const express = require("express");
 const connectDB = require("./db/connect");
+const authRoutes = require("./routes/auth");
+const mongoose = require("mongoose");
 
 // additional security packages
 const helmet = require("helmet");
@@ -17,12 +19,13 @@ const app = express();
 
 //TODO: middlewares
 
-//TODO: routes
+// routes
+app.use("api/v1/auth", authRoutes);
 
 const start = async () => {
   try {
     await connectDB(MONGODB_URL);
-    app.listen(PORT, (req, res) => {
+    app.listen(PORT, () => {
       console.log(`server is listening at port ${PORT}...`);
     });
   } catch (error) {
@@ -30,4 +33,4 @@ const start = async () => {
   }
 };
 
-start();
+// start();
