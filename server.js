@@ -4,7 +4,7 @@ require("express-async-errors");
 const express = require("express");
 const connectDB = require("./db/connect");
 const authRoutes = require("./routes/auth");
-const mongoose = require("mongoose");
+const errorHandlerMiddleWare = require("./middleware/errorHandler");
 
 // additional security packages
 const helmet = require("helmet");
@@ -17,20 +17,22 @@ const MONGODB_URL = process.env.MONGODB_URL;
 
 const app = express();
 
-//TODO: middlewares
+app.use(express.json());
 
 // routes
-app.use("api/v1/auth", authRoutes);
+app.use("/api/v1/auth", authRoutes);
+
+app.use(errorHandlerMiddleWare);
 
 const start = async () => {
   try {
     await connectDB(MONGODB_URL);
     app.listen(PORT, () => {
-      console.log(`server is listening at port ${PORT}...`);
+      console.log(`Server is listening at port ${PORT}`);
     });
   } catch (error) {
     console.log(error.message);
   }
 };
 
-// start();
+start();
