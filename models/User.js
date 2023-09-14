@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const { isEmail } = require("validator");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
 
 const userSchema = new mongoose.Schema(
   {
@@ -32,10 +33,17 @@ const userSchema = new mongoose.Schema(
 const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_LIFETIME = process.env.JWT_LIFETIME;
 
+// create and assign JWT
 userSchema.methods.createJWT = function (id) {
-  jwt.sign({ id: this._id, name: this.name }, JWT_SECRET, {
+  return jwt.sign({ id: this._id, name: this.name }, JWT_SECRET, {
     expiresIn: JWT_LIFETIME,
   });
 };
+
+// hash password before saving to database
+userSchema.pre("save", async function () {
+  const salt = await bcrypt.genSalt();
+  this.password = await bcrypt.hash(this.password, salt);
+});
 
 module.exports = mongoose.model("User", userSchema);
