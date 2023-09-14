@@ -12,13 +12,14 @@ const register = async (req, res) => {
       },
       token: token,
     });
-  } catch (error) {
-    console.log(error.message);
+  } catch (err) {
+    throw err;
   }
 };
 
 const login = async (req, res) => {
-  const { name, email, passowrd } = req.body;
+  // const { name, email, passowrd } = req.body;
+  res.json("hello");
 };
 
 module.exports = { register, login };
