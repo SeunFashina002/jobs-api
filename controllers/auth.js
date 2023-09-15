@@ -18,8 +18,20 @@ const register = async (req, res) => {
 };
 
 const login = async (req, res) => {
-  // const { name, email, passowrd } = req.body;
-  res.json("hello");
+  const { email, password } = req.body;
+  try {
+    const user = await User.login(email, password);
+    const token = user.createJWT();
+    res.status(StatusCodes.OK).json({
+      success: true,
+      data: {
+        name: user.email,
+      },
+      token: token,
+    });
+  } catch (err) {
+    res.status(400).json({ success: false, errors: err.message });
+  }
 };
 
 module.exports = { register, login };
