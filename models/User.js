@@ -34,10 +34,24 @@ const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_LIFETIME = process.env.JWT_LIFETIME;
 
 // create and assign JWT
-userSchema.methods.createJWT = function (id) {
+userSchema.methods.createJWT = function () {
   return jwt.sign({ id: this._id, name: this.name }, JWT_SECRET, {
     expiresIn: JWT_LIFETIME,
   });
+};
+
+// login functionality
+
+userSchema.statics.login = async function (email, password) {
+  const user = await this.findOne({ email });
+  if (user) {
+    const auth = await bcrypt.compare(password, user.password);
+    if (auth) {
+      return user;
+    }
+    throw Error("invalid credentials");
+  }
+  throw Error("user with this email does not exist");
 };
 
 // hash password before saving to database
