@@ -4,7 +4,9 @@ require("express-async-errors");
 const express = require("express");
 const connectDB = require("./db/connect");
 const authRoutes = require("./routes/auth");
+const jobsRoutes = require("./routes/jobs");
 const errorHandlerMiddleWare = require("./middleware/errorHandler");
+const isAuthenticated = require("./middleware/isAuthenticated");
 
 // additional security packages
 const helmet = require("helmet");
@@ -21,7 +23,9 @@ app.use(express.json());
 
 // routes
 app.use("/api/v1/auth", authRoutes);
+app.use("/api/v1/jobs", isAuthenticated, jobsRoutes);
 
+// middleware
 app.use(errorHandlerMiddleWare);
 
 const start = async () => {
