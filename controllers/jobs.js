@@ -14,3 +14,5 @@ const createJob = async (req, res) => {
 };
 
 // TODO: Get all jobs
+const getJobs = (req, res) => {
+}
