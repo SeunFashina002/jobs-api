@@ -18,3 +18,5 @@ const getJobs = async (req, res) => {
   const jobs = Jobs.find({createdBy: req.user.id)
   res.status(StatusCodes.OK).json({success:true, data:jobs})
 }
+
+module.exports = {createJob, getJobs}
