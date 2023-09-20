@@ -35,4 +35,4 @@ const getJob = async (req, res) => {
   res.status(StatusCodes.OK).json({ job })
 }
 
-module.exports = {createJob, getJobs}
+module.exports = {createJob, getJobs, getJob}
