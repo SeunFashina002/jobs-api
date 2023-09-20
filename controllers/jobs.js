@@ -19,4 +19,20 @@ const getJobs = async (req, res) => {
   res.status(StatusCodes.OK).json({success:true, data:jobs})
 }
 
+const getJob = async (req, res) => {
+  const {
+    user: { id },
+    params: { jobId: id },
+  } = req
+
+  const job = await Job.findOne({
+    _id: jobId,
+    createdBy: userId,
+  })
+  if (!job) {
+    throw new NotFoundError(`No job with id ${jobId}`)
+  }
+  res.status(StatusCodes.OK).json({ job })
+}
+
 module.exports = {createJob, getJobs}
