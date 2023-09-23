@@ -15,7 +15,7 @@ const createJob = async (req, res) => {
 
 // TODO: Get all jobs
 const getJobs = async (req, res) => {
-  const jobs = Jobs.find({createdBy: req.user.id)}
+  const jobs = await Jobs.find({createdBy: req.user.id)}
   res.status(StatusCodes.OK).json({success:true, data:jobs})
 }
 
