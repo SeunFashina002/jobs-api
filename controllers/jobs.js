@@ -34,6 +34,25 @@ const getAllJobs = async (req, res) => {
       .json({ success: false, error: err.message });
   }
 };
+
+const getJob = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const job = await Jobs.findOne({ _id: id, createdBy: req.user.id });
+    if (!job) {
+      return res.status(StatusCodes.NOT_FOUND).json({
+        success: true,
+        message: `No, jobs found with the id: ${id}`,
+      });
+    }
+    res.status(StatusCodes.OK).json({ success: true, data: job });
+  } catch (err) {
+    res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ success: false, error: err.message });
+  }
+};
+
 // const getJobs = async (req, res) => {
 //   const jobs = Jobs.find({ createdBy: req.user.id })
 //   res.status(StatusCodes.OK).json({success:true, data:jobs})
@@ -55,4 +74,4 @@ const getAllJobs = async (req, res) => {
 //   res.status(StatusCodes.OK).json({ job })
 // }
 
-module.exports = { createJob, getAllJobs };
+module.exports = { createJob, getAllJobs, getJob };
