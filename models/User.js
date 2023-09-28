@@ -36,7 +36,7 @@ const JWT_LIFETIME = process.env.JWT_LIFETIME;
 // create and assign JWT
 userSchema.methods.createJWT = function () {
   return jwt.sign({ id: this._id, name: this.name }, JWT_SECRET, {
-    expiresIn: JWT_LIFETIME,
+    expiresIn: "3d",
   });
 };
 

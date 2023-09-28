@@ -19,7 +19,7 @@ const jobSchema = mongoose.Schema({
   createdBy: {
     type: mongoose.Types.ObjectId,
     required: [true, "This field cannot be left empty"],
-    ref: "user",
+    ref: "User",
   },
 });
 
