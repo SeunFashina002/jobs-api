@@ -2,20 +2,38 @@ const Jobs = require("../models/Jobs");
 const { StatusCodes } = require("http-status-codes");
 
 const createJob = async (req, res) => {
-  console.log("yeah");
-
-  // try {
-  //   req.body.createdBy = req.user.id;
-  //   const job = await Jobs.create(req.body);
-  //   res.status(StatusCodes.CREATED).json({ success: true, data: job });
-  // } catch (err) {
-  //   res
-  //     .status(StatusCodes.BAD_REQUEST)
-  //     .json({ success: false, error: err.message });
-  // }
+  try {
+    req.body.createdBy = req.user.id;
+    const job = await Jobs.create(req.body);
+    res.status(StatusCodes.CREATED).json({ success: true, data: job });
+  } catch (err) {
+    res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ success: false, error: err.message });
+  }
 };
 
-// // TODO: Get all jobs
+// TODO: Get all jobs
+
+const getAllJobs = async (req, res) => {
+  try {
+    const jobs = await Jobs.find({ createdBy: req.user.id });
+    if (jobs.length === 0) {
+      return res.status(StatusCodes.OK).json({
+        success: true,
+        message: "oops, seems you have no jobs yet",
+        count: jobs.length,
+      });
+    }
+    res
+      .status(StatusCodes.OK)
+      .json({ success: true, data: jobs, count: jobs.length });
+  } catch (err) {
+    res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ success: false, error: err.message });
+  }
+};
 // const getJobs = async (req, res) => {
 //   const jobs = Jobs.find({ createdBy: req.user.id })
 //   res.status(StatusCodes.OK).json({success:true, data:jobs})
@@ -37,4 +55,4 @@ const createJob = async (req, res) => {
 //   res.status(StatusCodes.OK).json({ job })
 // }
 
-module.exports = createJob;
+module.exports = { createJob, getAllJobs };
