@@ -89,12 +89,12 @@ const deleteJob = async (req, res) => {
         success: false,
         message: `No, jobs found with the id: ${id}`,
       });
-
-      res.status(StatusCodes.NO_CONTENT).json({
-        success: true,
-        message: `The ${job.position} role at ${job.company} has been successfully deleted`,
-      });
     }
+
+    res.status(StatusCodes.NO_CONTENT).json({
+      success: true,
+      message: `The ${job.position} role at ${job.company} has been successfully deleted`,
+    });
   } catch (err) {
     res
       .status(StatusCodes.BAD_REQUEST)
