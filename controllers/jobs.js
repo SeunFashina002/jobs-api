@@ -84,6 +84,7 @@ const deleteJob = async (req, res) => {
       _id: id,
       createdBy: req.user.id,
     });
+
     if (!job) {
       return res.status(StatusCodes.NOT_FOUND).json({
         success: false,
@@ -91,10 +92,12 @@ const deleteJob = async (req, res) => {
       });
     }
 
-    res.status(StatusCodes.NO_CONTENT).json({
-      success: true,
-      message: `The ${job.position} role at ${job.company} has been successfully deleted`,
-    });
+    res
+      .status(StatusCodes.NO_CONTENT)
+      .json({
+        success: true,
+        message: `The job has been successfully deleted`,
+      });
   } catch (err) {
     res
       .status(StatusCodes.BAD_REQUEST)
