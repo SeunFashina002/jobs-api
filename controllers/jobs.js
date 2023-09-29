@@ -20,7 +20,7 @@ const getAllJobs = async (req, res) => {
     const jobs = await Jobs.find({ createdBy: req.user.id });
     if (jobs.length === 0) {
       return res.status(StatusCodes.OK).json({
-        success: true,
+        success: false,
         message: "oops, seems you have no jobs yet",
         count: jobs.length,
       });
@@ -41,7 +41,7 @@ const getJob = async (req, res) => {
     const job = await Jobs.findOne({ _id: id, createdBy: req.user.id });
     if (!job) {
       return res.status(StatusCodes.NOT_FOUND).json({
-        success: true,
+        success: false,
         message: `No, jobs found with the id: ${id}`,
       });
     }
@@ -66,7 +66,7 @@ const updateJob = async (req, res) => {
 
     if (!job) {
       return res.status(StatusCodes.NOT_FOUND).json({
-        success: true,
+        success: false,
         message: `No, jobs found with the id: ${id}`,
       });
     }
@@ -76,4 +76,30 @@ const updateJob = async (req, res) => {
   }
 };
 
-module.exports = { createJob, getAllJobs, getJob, updateJob };
+const deleteJob = async (req, res) => {
+  const { id } = req.params;
+  req.body.createdBy = req.user.id;
+  try {
+    const job = await Jobs.findByIdAndDelete({
+      _id: id,
+      createdBy: req.user.id,
+    });
+    if (!job) {
+      return res.status(StatusCodes.NOT_FOUND).json({
+        success: false,
+        message: `No, jobs found with the id: ${id}`,
+      });
+
+      res.status(StatusCodes.NO_CONTENT).json({
+        success: true,
+        message: `The ${job.position} role at ${job.company} has been successfully deleted`,
+      });
+    }
+  } catch (err) {
+    res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ success: false, error: err.message });
+  }
+};
+
+module.exports = { createJob, getAllJobs, getJob, updateJob, deleteJob };
