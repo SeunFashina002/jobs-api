@@ -53,4 +53,27 @@ const getJob = async (req, res) => {
   }
 };
 
-module.exports = { createJob, getAllJobs, getJob };
+const updateJob = async (req, res) => {
+  const { id } = req.params;
+  try {
+    req.body.createdBy = req.user.id;
+
+    const job = await Jobs.findByIdAndUpdate(
+      { _id: id, createdBy: req.user.id },
+      req.body,
+      { new: true, runValidators: true }
+    );
+
+    if (!job) {
+      return res.status(StatusCodes.NOT_FOUND).json({
+        success: true,
+        message: `No, jobs found with the id: ${id}`,
+      });
+    }
+    res.status(StatusCodes.OK).json({ success: true, data: job });
+  } catch (err) {
+    throw err;
+  }
+};
+
+module.exports = { createJob, getAllJobs, getJob, updateJob };
