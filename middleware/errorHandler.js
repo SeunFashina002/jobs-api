@@ -1,3 +1,5 @@
+const { StatusCodes } = require("http-status-codes");
+
 const handleErrors = (err, req, res, next) => {
   let errors = {};
 
@@ -12,7 +14,13 @@ const handleErrors = (err, req, res, next) => {
     errors.email = "user with this email already exist";
   }
 
-  return res.status(400).json({ error: err.name, details: errors });
+  if (err.name === "CastError") {
+    errors.message = err.message;
+  }
+
+  return res
+    .status(StatusCodes.BAD_REQUEST)
+    .json({ error: err.name, details: errors });
 };
 
 module.exports = handleErrors;
