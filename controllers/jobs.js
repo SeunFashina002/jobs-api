@@ -80,24 +80,19 @@ const deleteJob = async (req, res) => {
   const { id } = req.params;
   req.body.createdBy = req.user.id;
   try {
-    const job = await Jobs.findByIdAndDelete({
+    const job = await Jobs.findByIdAndRemove({
       _id: id,
       createdBy: req.user.id,
     });
 
     if (!job) {
-      return res.status(StatusCodes.NOT_FOUND).json({
-        success: false,
-        message: `No, jobs found with the id: ${id}`,
-      });
+      return res
+        .status(StatusCodes.NOT_FOUND)
+        .json({ success: false, message: `No, jobs found with the id: ${id}` });
     }
-
     res
-      .status(StatusCodes.NO_CONTENT)
-      .json({
-        success: true,
-        message: `The job has been successfully deleted`,
-      });
+      .status(StatusCodes.OK)
+      .json({ success: true, message: "Job has been deleted successfully" });
   } catch (err) {
     res
       .status(StatusCodes.BAD_REQUEST)
